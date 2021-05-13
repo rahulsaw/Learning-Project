@@ -1,4 +1,4 @@
-package com.learn.learningproject;
+package com.learn.learningproject.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
