@@ -21,7 +21,7 @@ public class TestController {
     public Collection<String> sayHello() {
         log.info("inside the test controller say hello method..");
         return IntStream.range(0, 10)
-                .mapToObj(i -> "Hello number " + i).collect(Collectors.toList());
+                .mapToObj(i -> "Hello number  " + i).collect(Collectors.toList());
 
 
     }
