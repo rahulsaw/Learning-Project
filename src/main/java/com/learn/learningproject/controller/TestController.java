@@ -2,6 +2,7 @@ package com.learn.learningproject.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,12 +19,15 @@ public class TestController {
 
     public final static Logger log = LoggerFactory.getLogger(TestController.class);
 
+    @Value("${test.prop:abc}")
+    private String testPropertyValue;
+
     @GetMapping("/hello")
     public Collection<String> sayHello() {
         log.info("inside the test controller say hello method....");
+        log.info("test.prop property value is : {}", testPropertyValue);
+        log.error("error logs");
         return IntStream.range(0, 10)
                 .mapToObj(i -> "Hello number  " + i).collect(Collectors.toList());
-
-
     }
 }
