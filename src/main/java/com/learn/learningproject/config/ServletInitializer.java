@@ -10,12 +10,14 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /*
 Rahul sawaria created on 12/05/21
 */
 @SpringBootApplication(scanBasePackages = {"com.learn.learningproject"},exclude = {HibernateJpaAutoConfiguration.class, DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, SpringDataWebAutoConfiguration.class, JpaRepositoriesAutoConfiguration.class})
 @PropertySource(value = {"file:/etc/learning_project/application.properties"})
+@EnableAsync
 public class ServletInitializer extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
