@@ -24,9 +24,9 @@ created by Rahul sawaria on 19/05/21
 @Component
 public class BasicHttpClientService {
 
-    Logger logger = LoggerFactory.getLogger(BasicHttpClientService.class);
+    private static  final Logger logger = LoggerFactory.getLogger(BasicHttpClientService.class);
 
-    private final static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     public <T> T getResponse(String requestUrl, Map<String, String> header, Class<T> responseClass) {
 
@@ -75,8 +75,10 @@ public class BasicHttpClientService {
 
         logger.info("Http status code is : {}", httpResponse.getStatusLine().getStatusCode());
 
-        if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK && httpResponse.getEntity() != null) {
-            HttpEntity httpEntity = httpResponse.getEntity();
+        HttpEntity httpEntity = httpResponse.getEntity();
+
+        if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK && httpEntity != null) {
+
             try {
                 String responseString = EntityUtils.toString(httpEntity, "UTF-8");
                 logger.info(responseString);

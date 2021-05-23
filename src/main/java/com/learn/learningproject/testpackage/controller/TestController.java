@@ -22,7 +22,7 @@ Rahul sawaria created on 11/05/21
 @RequestMapping("test/")
 public class TestController {
 
-    public final static Logger log = LoggerFactory.getLogger(TestController.class);
+    private static final Logger log = LoggerFactory.getLogger(TestController.class);
 
     @Autowired
     private TestService testService;
@@ -52,4 +52,12 @@ public class TestController {
         log.info("inside the test controller get method....");
         return testService.get();
     }
+
+    @PostMapping("email")
+    public String sendEmail(@RequestParam String recipient) {
+        log.info("inside the test controller sendEmail method....");
+        testService.testEmailService(recipient);
+        return "Email send successfully to "+recipient;
+    }
+
 }

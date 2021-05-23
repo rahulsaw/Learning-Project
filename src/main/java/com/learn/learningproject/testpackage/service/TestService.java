@@ -13,4 +13,5 @@ public interface TestService {
 
     List<Test> get();
 
+    void testEmailService(String recipient);
 }

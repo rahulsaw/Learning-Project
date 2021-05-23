@@ -17,7 +17,7 @@ import java.util.List;
 @Repository
 public class TestDao {
 
-    Logger log = LoggerFactory.getLogger(TestDao.class);
+    private static  final Logger log = LoggerFactory.getLogger(TestDao.class);
 
     @Autowired
     private SessionFactory factory;
