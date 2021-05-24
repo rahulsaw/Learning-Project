@@ -1,6 +1,5 @@
 package com.learn.learningproject.commonservices;
 
-import com.learn.learningproject.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.util.Properties;
 
+import static com.learn.learningproject.Constant.*;
 /*
 created by Rahul sawaria on 22/05/21
 */
@@ -28,25 +28,26 @@ public class EmailService {
     @Autowired
     private Environment environment;
 
-    private static Session session;
+    private Properties properties;
 
     @PostConstruct
-    public void emailConfig() {
+    private Properties loadProperties() {
+        properties = new Properties();
+        properties.put(MAIL_STARTTLS_ENABLE, environment.getRequiredProperty(MAIL_STARTTLS_ENABLE));
+        properties.put(MAIL_SMTP_PORT, environment.getRequiredProperty(MAIL_SMTP_PORT));//port of smtp server,need to change acc to smtp server
+        properties.put(MAIL_SMTP_AUTH, environment.getRequiredProperty(MAIL_SMTP_AUTH));
+        properties.put(MAIL_SMTP_HOST, environment.getRequiredProperty(MAIL_SMTP_HOST));// this need to change acc to smtp server
+        properties.put(MAIL_SSL_PROTOCOL, environment.getRequiredProperty(MAIL_SSL_PROTOCOL));
+        properties.put(MAIL_DEBUG, environment.getRequiredProperty(MAIL_DEBUG)); //used to debug the mail logs
+        return properties;
+    }
 
-        Properties prop = System.getProperties();
-
-        prop.put(Constant.MAIL_STARTTLS_ENABLE, environment.getRequiredProperty(Constant.MAIL_STARTTLS_ENABLE));
-        prop.put(Constant.MAIL_SMTP_PORT, environment.getRequiredProperty(Constant.MAIL_SMTP_PORT));//port of smtp server,need to change acc to smtp server
-        prop.put(Constant.MAIL_SMTP_AUTH, environment.getRequiredProperty(Constant.MAIL_SMTP_AUTH));
-        prop.put(Constant.MAIL_SMTP_HOST, environment.getRequiredProperty(Constant.MAIL_SMTP_HOST));// this need to change acc to smtp server
-        prop.put(Constant.MAIL_SSL_PROTOCOL, environment.getRequiredProperty(Constant.MAIL_SSL_PROTOCOL));
-        prop.put(Constant.MAIL_DEBUG, environment.getRequiredProperty(Constant.MAIL_DEBUG)); //used to debug the mail logs
-
-        session = Session.getDefaultInstance(prop, new Authenticator() {
+    private Session buildSession(Properties properties){
+       return Session.getDefaultInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(environment.getRequiredProperty(Constant.MAIL_SESSION_USER),
-                        environment.getRequiredProperty(Constant.MAIL_SESSION_PASSWORD));
+                return new PasswordAuthentication(environment.getRequiredProperty(MAIL_SESSION_USER),
+                        environment.getRequiredProperty(MAIL_SESSION_PASSWORD));
             }
         });
     }
@@ -55,8 +56,8 @@ public class EmailService {
     public void sendEmail(String[] recipientList, String emailSubject, String msgBody, String contentType, File attachmentFile, String fileName) {
 
         try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(environment.getRequiredProperty(Constant.MAIL_FROM)));
+            Message message = new MimeMessage(buildSession(properties));
+            message.setFrom(new InternetAddress(environment.getRequiredProperty(MAIL_FROM)));
             message.setSubject(emailSubject);
 
             for (String recipient : recipientList) {
